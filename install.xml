@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<modification>
+    <name>Abandoned Carts</name>
+    <code>abandoned_carts_ocv129</code>
+    <description>Reach out to prospects with bailed carts; gain valuable insight to usability and recover lost sales.</description>
+    <version>1.2.9</version>
+    <author>Angela|CartBinder</author>
+    <link>https://www.cartbinder.com/</link>
+
+    <file path="admin/controller/common/header.php">
+        <operation error="skip" info="Model inclusion for abandoned carts.">
+            <search ><![CDATA[$data['stores'] = array();]]></search>
+            <add position="after"><![CDATA[
+                $data['module_abandoned_carts_status'] = $this->config->get('module_abandoned_carts_status');
+                if($data['module_abandoned_carts_status']) {
+                    $this->load->model('extension/module/abandoned_carts');
+                    // Bailed Carts
+                    $data['bailed_carts_total']  = $this->model_extension_module_abandoned_carts->getTotalOrders();
+                    $data['bailed_carts']       = $this->url->link('extension/report/abandoned_carts', 'user_token=' . $this->session->data['user_token'], true);
+                }
+            ]]></add>
+        </operation>
+        <operation error="skip" info="Alert total, with any bailed carts summed.">
+            <search ><![CDATA[
+              $data['alerts'] = $customer_total + $product_total + $review_total + $return_total + $affiliate_total;
+              ]]></search>
+            <add position="after"><![CDATA[
+              $data['alerts'] = $customer_total + $product_total + $bailed_carts_total + $review_total + $return_total + $affiliate_total;
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/language/en-gb/common/header.php">
+        <operation error="skip" info="English language definition for bailed carts menu entry.">
+            <search ><![CDATA[
+              $_['text_order']             = 'Orders';
+              ]]></search>
+            <add position="after"><![CDATA[
+              $_['text_bailed_carts']      = 'Bailed Carts';
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/language/ar/common/header.php">
+        <operation error="skip" info="Arabic language definition for bailed carts menu entry.">
+            <search ><![CDATA[
+              $_['text_order']             = 'الطلبات';
+              ]]></search>
+            <add position="after"><![CDATA[
+              $_['text_bailed_carts']      = 'السلات المهجورة';
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/language/pt-br/common/header.php">
+        <operation error="skip" info="Brazilian Portugese language definition for bailed carts menu entry.">
+            <search ><![CDATA[
+              $_['text_order']             = 'Encomendas';
+              ]]></search>
+            <add position="after"><![CDATA[
+              $_['text_bailed_carts']      = 'Carrinhos abandonados;
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/language/pt-pt/common/header.php">
+        <operation error="skip" info="Portugese language definition for bailed carts menu entry.">
+            <search ><![CDATA[
+              $_['text_order']             = 'Encomendas';
+              ]]></search>
+            <add position="after"><![CDATA[
+              $_['text_bailed_carts']      = 'Carrinhos abandonados;
+            ]]></add>
+        </operation>
+    </file>
+
+    <file path="admin/view/template/common/header.twig">
+        <operation error="skip" info="Adds a link in header alerts to bailed carts breakdown.">
+            <search ><![CDATA[<ul class="nav navbar-nav navbar-right">]]></search>
+            <add position="after"><![CDATA[
+              {% if bailed_carts_total is defined %}
+        <li><a href="{{ bailed_carts }}" style="display: block; overflow: auto;"><span class="label label-danger pull-right">{{ bailed_carts_total }}</span><i class="fa fa-bell" aria-hidden="true">{{ text_bailed_carts }}</i></a></li>
+       {% endif %}
+            ]]></add>
+        </operation>
+    </file>
+</modification>
