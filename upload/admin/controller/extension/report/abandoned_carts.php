@@ -1,8 +1,10 @@
 <?php
-class ControllerExtensionReportAbandonedCarts extends Controller {
+class ControllerExtensionReportAbandonedCarts extends Controller
+{
 	private $error = array();
 
-	public function index() {
+	public function index()
+	{
 		$this->load->language('extension/report/abandoned_carts');
 
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -12,7 +14,8 @@ class ControllerExtensionReportAbandonedCarts extends Controller {
 		$this->getList();
 	}
 
-	public function recover() {
+	public function recover()
+	{
 		$this->load->language('extension/report/abandoned_carts');
 
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -34,7 +37,8 @@ class ControllerExtensionReportAbandonedCarts extends Controller {
 		$this->getList();
 	}
 
-	protected function getList() {
+	protected function getList()
+	{
 		if (isset($this->request->get['sort'])) {
 			$sort = $this->request->get['sort'];
 		} else {
@@ -110,11 +114,11 @@ class ControllerExtensionReportAbandonedCarts extends Controller {
 				'user_agent'      => $result['user_agent'],
 				'abandoned'       => $result['abandoned'],
 				'duplicate_count' => $existing_carts,
-				'duplicate'       => ($result['abandoned'] =='0' && $existing_carts > 0) ? sprintf($this->language->get('warning_duplicate'),$existing_carts,'<a data-toggle="tooltip" title="" data-original-title="'.$this->language->get('text_search').'" href="'.$this->url->link('customer/customer', 'user_token=' . $this->session->data['user_token'].'&filter_ip='.$result['ip'], true).'">'.$result['customer'].'</a>') : ''
+				'duplicate'       => ($result['abandoned'] == '0' && $existing_carts > 0) ? sprintf($this->language->get('warning_duplicate'), $existing_carts, '<a data-toggle="tooltip" title="" data-original-title="' . $this->language->get('text_search') . '" href="' . $this->url->link('customer/customer', 'user_token=' . $this->session->data['user_token'] . '&filter_ip=' . $result['ip'], true) . '">' . $result['customer'] . '</a>') : ''
 			);
 		}
 
-		$data['freeextensionslink'] = "https://www.cartbinder.com/store/free-opencart-extensions?utm_source=freeextension&utm_medium=abandonedcart";
+		$data['freeextensionslink'] = "https://github.com/suborgerry/Abandoned-Carts-OC";
 
 		$data['user_token']                  = $this->session->data['user_token'];
 
@@ -190,7 +194,8 @@ class ControllerExtensionReportAbandonedCarts extends Controller {
 	}
 
 
-	public function delete() {
+	public function delete()
+	{
 		$this->load->language('extension/report/abandoned_carts');
 
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -210,7 +215,8 @@ class ControllerExtensionReportAbandonedCarts extends Controller {
 		$this->getList();
 	}
 
-	protected function validate() {
+	protected function validate()
+	{
 		if (!$this->user->hasPermission('modify', 'extension/report/abandoned_carts')) {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
